@@ -82,7 +82,7 @@ function App() {
               <p className="text-muted small">IXAPACK</p>
             </div>
           </div>
-          <div className="orange-500 border-bottom border-4"></div>
+          <div className="border-bottom border-4" style={{ borderColor: '#C81517' }}></div>
         </header>
 
         {success ? (
@@ -99,7 +99,7 @@ function App() {
         ) : (
           <form onSubmit={handleSubmit} className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
             {error && (
-              <div className="alert alert-danger\" role="alert">
+              <div className="alert alert-danger" role="alert">
                 <p className="fw-bold">Erreur!</p>
                 <p>{error}</p>
               </div>
