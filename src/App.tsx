@@ -214,7 +214,7 @@ function App() {
 
             {formData.typeAction === 'Retouche' && (
               <div className="mt-4 pt-4 border-top">
-                <h3 className="h5 text-primary mb-4">Informations de retouche</h3>
+                <h3 className="h5 mb-4" style={{ color: '#C81517' }}>Informations de retouche</h3>
                 
                 <div>
                   <label htmlFor="retouche" className="form-label fw-semibold">Retouche</label>
