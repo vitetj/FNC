@@ -77,7 +77,7 @@ function App() {
       <div className="container">
         <header className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="display-4 text-primary">Formulaire FNC</h1>
+            <h1 className="display-4" style={{ color: '#C81517' }}>Formulaire FNC</h1>
             <div className="text-right">
               <p className="text-muted small">IXAPACK</p>
             </div>
@@ -253,7 +253,8 @@ function App() {
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-primary d-flex align-items-center"
+                  className="btn d-flex align-items-center text-white"
+                  style={{ backgroundColor: '#C81517' }}
                 >
                   <Send className="me-2" size={18} />
                   Envoyer
