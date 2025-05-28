@@ -99,7 +99,7 @@ function App() {
         ) : (
           <form onSubmit={handleSubmit} className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
             {error && (
-              <div className="alert alert-danger\" role="alert">
+              <div className="alert alert-danger" role="alert">
                 <p className="fw-bold">Erreur!</p>
                 <p>{error}</p>
               </div>
