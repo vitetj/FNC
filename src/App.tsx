@@ -117,7 +117,7 @@ function App() {
                   checked={formData.typeAction === 'Retouche'}
                   onChange={handleInputChange}
                 />
-                <label className="btn btn-outline-primary" htmlFor="retouche">Retouche</label>
+                <label className="btn btn-outline-danger" htmlFor="retouche">Retouche</label>
 
                 <input
                   type="radio"
@@ -128,7 +128,7 @@ function App() {
                   checked={formData.typeAction === 'Rebut'}
                   onChange={handleInputChange}
                 />
-                <label className="btn btn-outline-primary" htmlFor="rebut">Rebut</label>
+                <label className="btn btn-outline-danger" htmlFor="rebut">Rebut</label>
               </div>
             </div>
 
