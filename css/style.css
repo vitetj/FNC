@@ -1,0 +1,94 @@
+/**
+ * Custom styles for the FNC form
+ */
+
+/* Base styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Form animations */
+.form-appear {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Focus states with smooth transitions */
+.input-focus:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+/* Custom header gradient */
+.header-gradient {
+  background: linear-gradient(90deg, #1A56DB 0%, #3B82F6 100%);
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* Radio button custom styling */
+input[type="radio"] {
+  cursor: pointer;
+}
+
+input[type="radio"]:checked + span {
+  color: #1A56DB;
+  font-weight: 500;
+}
+
+/* Submit button hover effect */
+.submit-button {
+  transition: all 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Field validation styling */
+input.error, textarea.error {
+  border-color: #EF4444;
+  background-color: #FEF2F2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .form-container {
+    padding: 1rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
+  
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+  
+  .form-container {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
