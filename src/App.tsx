@@ -73,7 +73,7 @@ function App() {
   };
 
   return (
-    <div className="min-vh-100 bg-light py-4">
+    <div className="min-vh-100 py-4">
       <div className="container">
         <header className="mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -141,6 +141,8 @@ function App() {
                     name="of"
                     value={formData.of}
                     onChange={handleInputChange}
+                    className="form-control"
+                    required
                   />
               </div>
               
