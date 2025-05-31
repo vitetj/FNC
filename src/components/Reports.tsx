@@ -72,7 +72,7 @@ function Reports() {
   if (loading) {
     return (
       <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
-        <div className="spinner-border text-danger\" role="status">
+        <div className="spinner-border text-danger\" role=\"status">
           <span className="visually-hidden">Chargement...</span>
         </div>
       </div>
