@@ -256,19 +256,6 @@ function Reports() {
                 <option value="Rebut">Rebut</option>
               </select>
             </div>
-            <div className="col-md-3">
-              <label className="form-label">Statut</label>
-              <select
-                name="status"
-                className="form-select"
-                value={filters.status}
-                onChange={handleFilterChange}
-              >
-                <option value="">Tous</option>
-                <option value="Terminé">Terminé</option>
-                <option value="En cours">En cours</option>
-              </select>
-            </div>
           </div>
           <div className="mt-3">
             <button
@@ -290,7 +277,6 @@ function Reports() {
               <th>Date</th>
               <th>Type</th>
               <th>OF</th>
-              <th>Statut</th>
             </tr>
           </thead>
           <tbody>
@@ -304,11 +290,6 @@ function Reports() {
                   </span>
                 </td>
                 <td>{report.of}</td>
-                <td>
-                  <span className={`badge ${report.status === 'Terminé' ? 'bg-success' : 'bg-info'}`}>
-                    {report.status}
-                  </span>
-                </td>
               </tr>
             ))}
           </tbody>
