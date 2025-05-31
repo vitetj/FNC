@@ -98,7 +98,7 @@ function Statistics() {
   if (loading) {
     return (
       <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
-        <div className="spinner-border text-danger\" role="status">
+        <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Chargement...</span>
         </div>
       </div>
@@ -127,7 +127,7 @@ function Statistics() {
             <div className="card-body">
               <h3 className="h5 mb-4">Évolution mensuelle</h3>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={monthlyData}>
+                <BarChart data={stats.monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
@@ -148,7 +148,7 @@ function Statistics() {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={typeData}
+                    data={stats.typeData}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
@@ -157,7 +157,7 @@ function Statistics() {
                     fill="#8884d8"
                     dataKey="value"
                   >
-                    {typeData.map((entry, index) => (
+                    {stats.typeData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
