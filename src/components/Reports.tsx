@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { FileText, Download, Filter } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { saveAs } from 'file-saver';
-import { Modal } from 'bootstrap';
 
 interface Report {
   id: string;
@@ -179,7 +178,7 @@ function Reports() {
     `;
     document.body.appendChild(modal);
 
-    const modalInstance = new Modal(modal);
+    const modalInstance = new window.bootstrap.Modal(modal);
     modalInstance.show();
 
     modal.addEventListener('hidden.bs.modal', () => {
