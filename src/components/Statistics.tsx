@@ -98,7 +98,7 @@ function Statistics() {
   if (loading) {
     return (
       <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
-        <div className="spinner-border text-danger\" role="status">
+        <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Chargement...</span>
         </div>
       </div>
@@ -117,7 +117,7 @@ function Statistics() {
 
   const COLORS = ['#C81517', '#dc3545'];
 
-  return (@@ .. @@
+  return (
     <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
       <h2 className="h4 mb-4" style={{ color: '#C81517' }}>Statistiques FNC</h2>
 
