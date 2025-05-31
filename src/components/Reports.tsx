@@ -25,7 +25,7 @@ function Reports() {
     try {
       let query = supabase
         .from('fnc_forms')
-        .select('id, created_at, type_action, of, status')
+        .select('id, created_at, type_action, of, status, numero_fnc')
         .order('created_at', { ascending: false });
 
       if (filters.dateStart) {
@@ -177,7 +177,7 @@ function Reports() {
           <tbody>
             {reports.map(report => (
               <tr key={report.id}>
-                <td>{report.id}</td>
+                <td>{report.numero_fnc}</td>
                 <td>{new Date(report.created_at).toLocaleDateString('fr-FR')}</td>
                 <td>
                   <span className={`badge ${report.type_action === 'Retouche' ? 'bg-danger' : 'bg-warning'}`}>
