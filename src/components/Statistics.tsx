@@ -1,25 +1,123 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { supabase } from '../lib/supabase';
 
-// Sample data - replace with actual data from your backend
-const monthlyData = [
-  { name: 'Jan', retouches: 4, rebuts: 2 },
-  { name: 'Fév', retouches: 3, rebuts: 1 },
-  { name: 'Mar', retouches: 5, rebuts: 3 },
-  { name: 'Avr', retouches: 2, rebuts: 2 },
-  { name: 'Mai', retouches: 6, rebuts: 4 },
-  { name: 'Juin', retouches: 4, rebuts: 1 },
-];
-
-const typeData = [
-  { name: 'Retouches', value: 24 },
-  { name: 'Rebuts', value: 13 },
-];
-
-const COLORS = ['#C81517', '#dc3545'];
+interface StatsData {
+  monthlyData: Array<{
+    name: string;
+    retouches: number;
+    rebuts: number;
+  }>;
+  typeData: Array<{
+    name: string;
+    value: number;
+  }>;
+  totalFNC: number;
+  totalRetouches: number;
+  totalRebuts: number;
+  avgTemps: number;
+}
 
 function Statistics() {
-  return (
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<StatsData>({
+    monthlyData: [],
+    typeData: [],
+    totalFNC: 0,
+    totalRetouches: 0,
+    totalRebuts: 0,
+    avgTemps: 0
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const { data: forms, error: fetchError } = await supabase
+          .from('fnc_forms')
+          .select('*');
+
+        if (fetchError) {
+          throw fetchError;
+        }
+
+        // Process monthly data
+        const monthlyStats = forms.reduce((acc: any, form) => {
+          const month = new Date(form.created_at).toLocaleString('fr-FR', { month: 'short' });
+          if (!acc[month]) {
+            acc[month] = { retouches: 0, rebuts: 0 };
+          }
+          if (form.type_action === 'Retouche') {
+            acc[month].retouches++;
+          } else {
+            acc[month].rebuts++;
+          }
+          return acc;
+        }, {});
+
+        const monthlyData = Object.entries(monthlyStats).map(([name, counts]: [string, any]) => ({
+          name,
+          retouches: counts.retouches,
+          rebuts: counts.rebuts
+        }));
+
+        // Calculate totals
+        const totalRetouches = forms.filter(f => f.type_action === 'Retouche').length;
+        const totalRebuts = forms.filter(f => f.type_action === 'Rebut').length;
+
+        // Calculate average time
+        const validTimes = forms
+          .filter(f => f.temps !== null)
+          .map(f => f.temps);
+        const avgTemps = validTimes.length > 0
+          ? Math.round(validTimes.reduce((a, b) => a + b, 0) / validTimes.length)
+          : 0;
+
+        setStats({
+          monthlyData,
+          typeData: [
+            { name: 'Retouches', value: totalRetouches },
+            { name: 'Rebuts', value: totalRebuts }
+          ],
+          totalFNC: forms.length,
+          totalRetouches,
+          totalRebuts,
+          avgTemps
+        });
+
+        setLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        setLoading(false);
+      }
+    }
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
+        <div className="spinner-border text-danger" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  const COLORS = ['#C81517', '#dc3545'];
+
+  return (@@ .. @@
     <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
       <h2 className="h4 mb-4" style={{ color: '#C81517' }}>Statistiques FNC</h2>
 
@@ -78,25 +176,25 @@ function Statistics() {
                 <div className="col-md-3">
                   <div className="border rounded p-3 text-center">
                     <h4 className="h6 mb-2">Total FNC</h4>
-                    <p className="h3 mb-0" style={{ color: '#C81517' }}>37</p>
+                    <p className="h3 mb-0" style={{ color: '#C81517' }}>{stats.totalFNC}</p>
                   </div>
                 </div>
                 <div className="col-md-3">
                   <div className="border rounded p-3 text-center">
                     <h4 className="h6 mb-2">Retouches</h4>
-                    <p className="h3 mb-0" style={{ color: '#C81517' }}>24</p>
+                    <p className="h3 mb-0" style={{ color: '#C81517' }}>{stats.totalRetouches}</p>
                   </div>
                 </div>
                 <div className="col-md-3">
                   <div className="border rounded p-3 text-center">
                     <h4 className="h6 mb-2">Rebuts</h4>
-                    <p className="h3 mb-0" style={{ color: '#C81517' }}>13</p>
+                    <p className="h3 mb-0" style={{ color: '#C81517' }}>{stats.totalRebuts}</p>
                   </div>
                 </div>
                 <div className="col-md-3">
                   <div className="border rounded p-3 text-center">
                     <h4 className="h6 mb-2">Temps moyen</h4>
-                    <p className="h3 mb-0" style={{ color: '#C81517' }}>45min</p>
+                    <p className="h3 mb-0" style={{ color: '#C81517' }}>{stats.avgTemps}min</p>
                   </div>
                 </div>
               </div>

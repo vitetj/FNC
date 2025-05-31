@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface FormData {
   typeAction: 'Retouche' | 'Rebut';
@@ -43,9 +44,33 @@ function FNCForm() {
     e.preventDefault();
     setError('');
     setSuccess(false);
+    
+    try {
+      const { error: insertError } = await supabase
+        .from('fnc_forms')
+        .insert([
+          {
+            type_action: formData.typeAction,
+            of: formData.of,
+            origine: formData.origine,
+            numero_dossier: formData.numeroDossier,
+            reference_pieces: formData.referencePieces,
+            quantite_lancees: formData.quantiteLancees ? parseInt(formData.quantiteLancees) : null,
+            quantite_rebutees: formData.quantiteRebutees ? parseInt(formData.quantiteRebutees) : null,
+            quantite_retouchees: formData.quantiteRetouchees ? parseInt(formData.quantiteRetouchees) : null,
+            numero_fnc: formData.numeroFNC,
+            erreur_service: formData.erreurService,
+            cause: formData.cause,
+            retouche: formData.retouche,
+            phase: formData.phase,
+            temps: formData.temps ? parseInt(formData.temps) : null
+          }
+        ]);
 
-    // Simulate form submission
-    setTimeout(() => {
+      if (insertError) {
+        throw new Error(insertError.message);
+      }
+
       setSuccess(true);
       setFormData({
         typeAction: 'Retouche',
@@ -63,7 +88,9 @@ function FNCForm() {
         phase: '',
         temps: ''
       });
-    }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
