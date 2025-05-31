@@ -291,7 +291,6 @@ function Reports() {
               <th>Type</th>
               <th>OF</th>
               <th>Statut</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -309,15 +308,6 @@ function Reports() {
                   <span className={`badge ${report.status === 'Terminé' ? 'bg-success' : 'bg-info'}`}>
                     {report.status}
                   </span>
-                </td>
-                <td>
-                  <button 
-                    className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
-                    onClick={() => handleDetails(report)}
-                  >
-                    <FileText size={16} />
-                    Détails
-                  </button>
                 </td>
               </tr>
             ))}
