@@ -1,6 +1,10 @@
 import mysql from 'mysql2/promise';
 
 // Create connection pool using Cloudron environment variables
+if (!process.env.CLOUDRON_MYSQL_HOST) {
+  throw new Error('Missing Cloudron MySQL environment variables');
+}
+
 export const pool = mysql.createPool({
   host: process.env.CLOUDRON_MYSQL_HOST,
   port: parseInt(process.env.CLOUDRON_MYSQL_PORT || '3306'),
