@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { pool } from '../lib/db';
 
 interface FormData {
   typeAction: 'Retouche' | 'Rebut';
@@ -46,30 +46,29 @@ function FNCForm() {
     setSuccess(false);
     
     try {
-      const { error: insertError } = await supabase
-        .from('fnc_forms')
-        .insert([
-          {
-            type_action: formData.typeAction,
-            of: formData.of,
-            origine: formData.origine,
-            numero_dossier: formData.numeroDossier,
-            reference_pieces: formData.referencePieces,
-            quantite_lancees: formData.quantiteLancees ? parseInt(formData.quantiteLancees) : null,
-            quantite_rebutees: formData.quantiteRebutees ? parseInt(formData.quantiteRebutees) : null,
-            quantite_retouchees: formData.quantiteRetouchees ? parseInt(formData.quantiteRetouchees) : null,
-            numero_fnc: formData.numeroFNC,
-            erreur_service: formData.erreurService,
-            cause: formData.cause,
-            retouche: formData.retouche,
-            phase: formData.phase,
-            temps: formData.temps ? parseInt(formData.temps) : null
-          }
-        ]);
-
-      if (insertError) {
-        throw new Error(insertError.message);
-      }
+      const [result] = await pool.execute(
+        `INSERT INTO fnc_forms (
+          type_action, of, origine, numero_dossier, reference_pieces,
+          quantite_lancees, quantite_rebutees, quantite_retouchees,
+          numero_fnc, erreur_service, cause, retouche, phase, temps
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          formData.typeAction,
+          formData.of,
+          formData.origine,
+          formData.numeroDossier,
+          formData.referencePieces,
+          formData.quantiteLancees ? parseInt(formData.quantiteLancees) : null,
+          formData.quantiteRebutees ? parseInt(formData.quantiteRebutees) : null,
+          formData.quantiteRetouchees ? parseInt(formData.quantiteRetouchees) : null,
+          formData.numeroFNC,
+          formData.erreurService,
+          formData.cause,
+          formData.retouche,
+          formData.phase,
+          formData.temps ? parseInt(formData.temps) : null
+        ]
+      );
 
       setSuccess(true);
       setFormData({

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileText, Download, Filter } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { pool } from '../lib/db';
 import { saveAs } from 'file-saver';
 
 interface Report {
@@ -35,31 +35,27 @@ function Reports() {
 
   const fetchReports = async () => {
     try {
-      let query = supabase
-        .from('fnc_forms')
-        .select('*')
-        .order('created_at', { ascending: false });
+      let query = 'SELECT * FROM fnc_forms WHERE 1=1';
+      const params = [];
 
       if (filters.dateStart) {
-        query = query.gte('created_at', filters.dateStart);
+        query += ' AND created_at >= ?';
+        params.push(filters.dateStart);
       }
       if (filters.dateEnd) {
-        query = query.lte('created_at', filters.dateEnd);
+        query += ' AND created_at <= ?';
+        params.push(filters.dateEnd);
       }
       if (filters.type) {
-        query = query.eq('type_action', filters.type);
-      }
-      if (filters.status) {
-        query = query.eq('status', filters.status);
+        query += ' AND type_action = ?';
+        params.push(filters.type);
       }
 
-      const { data, error: fetchError } = await query;
+      query += ' ORDER BY created_at DESC';
 
-      if (fetchError) {
-        throw fetchError;
-      }
+      const [rows] = await pool.execute(query, params);
 
-      setReports(data || []);
+      setReports(rows as Report[]);
       setLoading(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');

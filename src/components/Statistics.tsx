@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { supabase } from '../lib/supabase';
+import { pool } from '../lib/db';
 
 interface StatsData {
   monthlyData: Array<{
@@ -33,13 +33,7 @@ function Statistics() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const { data: forms, error: fetchError } = await supabase
-          .from('fnc_forms')
-          .select('*');
-
-        if (fetchError) {
-          throw fetchError;
-        }
+        const [forms] = await pool.execute('SELECT * FROM fnc_forms');
 
         // Process monthly data
         const monthlyStats = forms.reduce((acc: any, form) => {
