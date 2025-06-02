@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { db } from '../lib/db';
+import { staticData } from '../lib/db';
 
 interface StatsData {
   monthlyData: Array<{
@@ -33,7 +33,7 @@ function Statistics() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const { rows: forms } = await db.execute('SELECT * FROM fnc_forms');
+        const forms = staticData.forms;
 
         // Process monthly data
         const monthlyStats = forms.reduce((acc: any, form) => {
@@ -92,7 +92,7 @@ function Statistics() {
   if (loading) {
     return (
       <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
-        <div className="spinner-border text-danger\" role="status">
+        <div className="spinner-border text-danger" role="status">
           <span className="visually-hidden">Chargement...</span>
         </div>
       </div>

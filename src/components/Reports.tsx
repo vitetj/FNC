@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileText, Download, Filter } from 'lucide-react';
-import { db } from '../lib/db';
+import { staticData } from '../lib/db';
 import { saveAs } from 'file-saver';
 
 interface Report {
@@ -35,27 +35,29 @@ function Reports() {
 
   const fetchReports = async () => {
     try {
-      let query = 'SELECT * FROM fnc_forms WHERE 1=1';
-      const params = [];
+      let filteredReports = [...staticData.forms];
 
       if (filters.dateStart) {
-        query += " AND date(created_at) >= date(?)";
-        params.push(filters.dateStart);
+        filteredReports = filteredReports.filter(report => 
+          new Date(report.created_at) >= new Date(filters.dateStart)
+        );
       }
       if (filters.dateEnd) {
-        query += " AND date(created_at) <= date(?)";
-        params.push(filters.dateEnd);
+        filteredReports = filteredReports.filter(report => 
+          new Date(report.created_at) <= new Date(filters.dateEnd)
+        );
       }
       if (filters.type) {
-        query += ' AND type_action = ?';
-        params.push(filters.type);
+        filteredReports = filteredReports.filter(report => 
+          report.type_action === filters.type
+        );
       }
 
-      query += ' ORDER BY created_at DESC';
+      filteredReports.sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
 
-      const { rows } = await db.execute({ sql: query, args: params });
-
-      setReports(rows as Report[]);
+      setReports(filteredReports as Report[]);
       setLoading(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');

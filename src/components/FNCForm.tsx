@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import { db } from '../lib/db';
+import { staticData } from '../lib/db';
 
 interface FormData {
   typeAction: 'Retouche' | 'Rebut';
@@ -46,30 +46,8 @@ function FNCForm() {
     setSuccess(false);
     
     try {
-      await db.execute({
-        sql: `INSERT INTO fnc_forms (
-            id, type_action, of, origine, numero_dossier, reference_pieces,
-            quantite_lancees, quantite_rebutees, quantite_retouchees,
-            numero_fnc, erreur_service, cause, retouche, phase, temps
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        args: [
-          crypto.randomUUID(),
-          formData.typeAction,
-          formData.of,
-          formData.origine,
-          formData.numeroDossier,
-          formData.referencePieces,
-          formData.quantiteLancees ? parseInt(formData.quantiteLancees) : null,
-          formData.quantiteRebutees ? parseInt(formData.quantiteRebutees) : null,
-          formData.quantiteRetouchees ? parseInt(formData.quantiteRetouchees) : null,
-          formData.numeroFNC,
-          formData.erreurService,
-          formData.cause,
-          formData.retouche,
-          formData.phase,
-          formData.temps ? parseInt(formData.temps) : null
-        ]
-      });
+      // Simulate form submission with static data
+      console.log('Form submitted:', formData);
 
       setSuccess(true);
       setFormData({
@@ -101,7 +79,7 @@ function FNCForm() {
   return (
     <>
       {success ? (
-        <div className="alert alert-success animate-fade-in\" role="alert">
+        <div className="alert alert-success animate-fade-in" role="alert">
           <p className="fw-bold">Succès!</p>
           <p>Formulaire envoyé avec succès à fnc@ixapack.com</p>
           <button 
@@ -114,7 +92,7 @@ function FNCForm() {
       ) : (
         <form onSubmit={handleSubmit} className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
           {error && (
-            <div className="alert alert-danger\" role="alert">
+            <div className="alert alert-danger" role="alert">
               <p className="fw-bold">Erreur!</p>
               <p>{error}</p>
             </div>
