@@ -5,7 +5,6 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react'],
-    include: ['@libsql/browser']
+    exclude: ['lucide-react', '@libsql/browser']
   },
 });
