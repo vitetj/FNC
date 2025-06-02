@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import { pool } from '../lib/db';
+import { db } from '../lib/db';
 
 interface FormData {
   typeAction: 'Retouche' | 'Rebut';
@@ -46,13 +46,14 @@ function FNCForm() {
     setSuccess(false);
     
     try {
-      const [result] = await pool.execute(
-        `INSERT INTO fnc_forms (
-          type_action, of, origine, numero_dossier, reference_pieces,
-          quantite_lancees, quantite_rebutees, quantite_retouchees,
-          numero_fnc, erreur_service, cause, retouche, phase, temps
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
+      await db.execute({
+        sql: `INSERT INTO fnc_forms (
+            id, type_action, of, origine, numero_dossier, reference_pieces,
+            quantite_lancees, quantite_rebutees, quantite_retouchees,
+            numero_fnc, erreur_service, cause, retouche, phase, temps
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          crypto.randomUUID(),
           formData.typeAction,
           formData.of,
           formData.origine,
@@ -68,7 +69,7 @@ function FNCForm() {
           formData.phase,
           formData.temps ? parseInt(formData.temps) : null
         ]
-      );
+      });
 
       setSuccess(true);
       setFormData({

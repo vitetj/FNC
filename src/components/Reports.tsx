@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileText, Download, Filter } from 'lucide-react';
-import { pool } from '../lib/db';
+import { db } from '../lib/db';
 import { saveAs } from 'file-saver';
 
 interface Report {
@@ -39,11 +39,11 @@ function Reports() {
       const params = [];
 
       if (filters.dateStart) {
-        query += ' AND created_at >= ?';
+        query += " AND date(created_at) >= date(?)";
         params.push(filters.dateStart);
       }
       if (filters.dateEnd) {
-        query += ' AND created_at <= ?';
+        query += " AND date(created_at) <= date(?)";
         params.push(filters.dateEnd);
       }
       if (filters.type) {
@@ -53,7 +53,7 @@ function Reports() {
 
       query += ' ORDER BY created_at DESC';
 
-      const [rows] = await pool.execute(query, params);
+      const { rows } = await db.execute({ sql: query, args: params });
 
       setReports(rows as Report[]);
       setLoading(false);
