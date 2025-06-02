@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@libsql/browser": "^0.5.3",
     "boosted": "^5.3.5",
     "file-saver": "^2.0.5",
     "lucide-react": "^0.344.0",
