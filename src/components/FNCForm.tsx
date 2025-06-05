@@ -79,7 +79,7 @@ function FNCForm() {
   return (
     <>
       {success ? (
-        <div className="alert alert-success animate-fade-in\" role="alert">
+        <div className="alert alert-success animate-fade-in" role="alert">
           <p className="fw-bold">Succès!</p>
           <p>Formulaire envoyé avec succès à fnc@ixapack.com</p>
           <button 
@@ -92,7 +92,7 @@ function FNCForm() {
       ) : (
         <form onSubmit={handleSubmit} className="bg-white shadow rounded p-4 mb-4 animate-fade-in">
           {error && (
-            <div className="alert alert-danger\" role="alert">
+            <div className="alert alert-danger" role="alert">
               <p className="fw-bold">Erreur!</p>
               <p>{error}</p>
             </div>
