@@ -3,7 +3,8 @@ import { Routes, Route, Link } from 'react-router-dom';
 import FNCForm from './components/FNCForm';
 import Statistics from './components/Statistics';
 import Reports from './components/Reports';
-import { FileText, BarChart2, FileSpreadsheet } from 'lucide-react';
+import { FileText, BarChart2, FileSpreadsheet, Settings } from 'lucide-react';
+import EmailSettings from './components/EmailSettings';
 
 function App() {
   return (
@@ -32,12 +33,17 @@ function App() {
             <FileSpreadsheet size={18} />
             Rapports
           </Link>
+          <Link to="/email-settings" className="nav-link d-flex align-items-center gap-2" style={{ color: '#C81517' }}>
+            <Settings size={18} />
+            E-mail
+          </Link>
         </nav>
 
         <Routes>
           <Route path="/" element={<FNCForm />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/email-settings" element={<EmailSettings />} />
         </Routes>
 
         <footer className="text-center text-muted small">

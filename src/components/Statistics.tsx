@@ -36,20 +36,20 @@ function Statistics() {
         const forms = staticData.forms;
 
         // Process monthly data
-        const monthlyStats = forms.reduce((acc: any, form) => {
+        const monthlyStats: Record<string, { retouches: number; rebuts: number }> = {};
+        for (const form of forms) {
           const month = new Date(form.created_at).toLocaleString('fr-FR', { month: 'short' });
-          if (!acc[month]) {
-            acc[month] = { retouches: 0, rebuts: 0 };
+          if (!monthlyStats[month]) {
+            monthlyStats[month] = { retouches: 0, rebuts: 0 };
           }
           if (form.type_action === 'Retouche') {
-            acc[month].retouches++;
+            monthlyStats[month].retouches++;
           } else {
-            acc[month].rebuts++;
+            monthlyStats[month].rebuts++;
           }
-          return acc;
-        }, {});
+        }
 
-        const monthlyData = Object.entries(monthlyStats).map(([name, counts]: [string, any]) => ({
+        const monthlyData = Object.entries(monthlyStats).map(([name, counts]: [string, { retouches: number; rebuts: number }]) => ({
           name,
           retouches: counts.retouches,
           rebuts: counts.rebuts

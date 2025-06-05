@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import { staticData } from '../lib/db';
 
 interface FormData {
   typeAction: 'Retouche' | 'Rebut';
@@ -46,8 +45,13 @@ function FNCForm() {
     setSuccess(false);
     
     try {
-      // Simulate form submission with static data
-      console.log('Form submitted:', formData);
+      const res = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (!res.ok) throw new Error('Erreur lors de l\'envoi');
 
       setSuccess(true);
       setFormData({
@@ -79,10 +83,10 @@ function FNCForm() {
   return (
     <>
       {success ? (
-        <div className="alert alert-success animate-fade-in\" role="alert">
+        <div className="alert alert-success animate-fade-in" role="alert">
           <p className="fw-bold">Succès!</p>
-          <p>Formulaire envoyé avec succès à fnc@ixapack.com</p>
-          <button 
+          <p>Formulaire envoyé avec succès</p>
+          <button
             className="btn btn-success mt-3"
             onClick={() => setSuccess(false)}
           >
