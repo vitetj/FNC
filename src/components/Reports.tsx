@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, Download, Filter } from 'lucide-react';
+import { Download, Filter } from 'lucide-react';
 import { staticData } from '../lib/db';
 import { saveAs } from 'file-saver';
 
@@ -109,81 +109,10 @@ function Reports() {
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
       saveAs(blob, `fnc_reports_${new Date().toISOString().split('T')[0]}.csv`);
     } catch (err) {
-      setError('Erreur lors de l\'export');
+      console.error(err);
+      setError("Erreur lors de l'export");
     }
   };
-
-  const handleDetails = (report: Report) => {
-    const detailsContent = `
-      <div class="modal-header">
-        <h5 class="modal-title">Détails FNC ${report.numero_fnc}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <dl class="row">
-          <dt class="col-sm-4">Type d'action</dt>
-          <dd class="col-sm-8">${report.type_action}</dd>
-          
-          <dt class="col-sm-4">OF</dt>
-          <dd class="col-sm-8">${report.of}</dd>
-          
-          <dt class="col-sm-4">Origine</dt>
-          <dd class="col-sm-8">${report.origine || '-'}</dd>
-          
-          <dt class="col-sm-4">Référence pièces</dt>
-          <dd class="col-sm-8">${report.reference_pieces || '-'}</dd>
-          
-          <dt class="col-sm-4">Quantité lancées</dt>
-          <dd class="col-sm-8">${report.quantite_lancees || '-'}</dd>
-          
-          <dt class="col-sm-4">Quantité rebutées</dt>
-          <dd class="col-sm-8">${report.quantite_rebutees || '-'}</dd>
-          
-          <dt class="col-sm-4">Quantité retouchées</dt>
-          <dd class="col-sm-8">${report.quantite_retouchees || '-'}</dd>
-          
-          <dt class="col-sm-4">Erreur Service</dt>
-          <dd class="col-sm-8">${report.erreur_service || '-'}</dd>
-          
-          <dt class="col-sm-4">Cause</dt>
-          <dd class="col-sm-8">${report.cause || '-'}</dd>
-          
-          ${report.type_action === 'Retouche' ? `
-            <dt class="col-sm-4">Retouche</dt>
-            <dd class="col-sm-8">${report.retouche || '-'}</dd>
-            
-            <dt class="col-sm-4">Phase</dt>
-            <dd class="col-sm-8">${report.phase || '-'}</dd>
-            
-            <dt class="col-sm-4">Temps</dt>
-            <dd class="col-sm-8">${report.temps ? `${report.temps} minutes` : '-'}</dd>
-          ` : ''}
-          
-          <dt class="col-sm-4">Statut</dt>
-          <dd class="col-sm-8">${report.status}</dd>
-        </dl>
-      </div>
-    `;
-
-    const modal = document.createElement('div');
-    modal.className = 'modal fade';
-    modal.innerHTML = `
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          ${detailsContent}
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-
-    const modalInstance = new window.bootstrap.Modal(modal);
-    modalInstance.show();
-
-    modal.addEventListener('hidden.bs.modal', () => {
-      document.body.removeChild(modal);
-    });
-  };
-
   if (loading) {
     return (
       <div className="bg-white shadow rounded p-4 mb-4 animate-fade-in text-center">
