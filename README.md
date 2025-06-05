@@ -20,6 +20,7 @@ Ce projet remplace la macro Outlook pour l'envoi des formulaires de non-conformi
 1. Clonez le dépôt ou téléchargez les fichiers sur votre serveur
 2. (Facultatif) importez `db.sql` dans MySQL si vous utilisez la version PHP
 3. Installez les dépendances Node.js avec `npm install`
+
 4. Pour une version de développement, lancez `npm run dev` puis `npm start`
 5. Pour générer les fichiers de production, exécutez `npm run build`
 6. Configurez les variables d'environnement Cloudron (`CLOUDRON_MYSQL_*` et `CLOUDRON_MAIL_*`)
