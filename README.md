@@ -1,28 +1,28 @@
 # Formulaire FNC - IXAPACK
 
-Ce formulaire web remplace la macro Outlook pour l'envoi des formulaires de non-conformité (FNC) directement à l'adresse fnc@ixapack.com.
+Ce projet remplace la macro Outlook pour l'envoi des formulaires de non-conformité (FNC). Il propose une interface moderne réalisée avec React et un backend Node.js pour l'envoi des e‑mails. Une implémentation PHP de référence est également fournie.
 
 
 ## Fonctionnalités
 
-- Interface de formulaire professionnelle avec design responsive
+- Interface React moderne (Vite + Boosted/Tailwind) et design responsive
 - Collecte complète des données correspondant à tous les champs de la macro d'origine
 - Validation côté client pour assurer la saisie correcte des données
-- Fonctionnalité d'envoi d'e-mail PHP avec formatage approprié
-- Backend Node.js utilisant le serveur mail Cloudron
-- Interface pour modifier l'adresse de réception
+- Envoi d'e‑mail via PHP ou via Node.js (nodemailer) avec prise en charge du SMTP Cloudron
+- Paramétrage de l'adresse de réception via l'onglet "E‑mail"
+- Pages "Statistiques" et "Rapports" avec export CSV
 - Notifications de succès/erreur pour l'état de soumission du formulaire
 - Sélection par bouton radio pour les options "Retouche" ou "Rebut"
 - Tous les champs de données de la macro d'origine correctement implémentés
 
 ## Installation
 
-1. Téléchargez les fichiers sur votre serveur web PHP
-2. Importez le fichier `db.sql` dans votre base de données MySQL (via phpMyAdmin par exemple)
+1. Clonez le dépôt ou téléchargez les fichiers sur votre serveur
+2. (Facultatif) importez `db.sql` dans MySQL si vous utilisez la version PHP
 3. Installez les dépendances Node.js avec `npm install`
-4. Lancez le backend avec `npm start`
-5. Configurez les variables d'environnement de LAMP (Cloudron renseigne automatiquement `CLOUDRON_MYSQL_*`)
-6. Accédez au formulaire via votre navigateur web
+4. Démarrez l'interface React avec `npm run dev` puis le backend d'envoi avec `npm start`
+5. Configurez les variables d'environnement Cloudron (`CLOUDRON_MYSQL_*` et `CLOUDRON_MAIL_*`)
+6. Accédez à l'application via `http://localhost:5173` en développement
 
 ## Configuration requise
 
@@ -36,12 +36,14 @@ Ce formulaire web remplace la macro Outlook pour l'envoi des formulaires de non-
 2. Sélectionnez "Retouche" ou "Rebut" selon le cas
 3. Complétez les champs obligatoires (marqués d'un astérisque *)
 4. Cliquez sur "Envoyer" pour soumettre le formulaire
+5. Consultez la page "Statistiques" pour un aperçu des envois
+6. Utilisez la page "Rapports" pour filtrer les données et exporter un CSV
 
-Le formulaire enverra automatiquement un e-mail à l'adresse configurée via l'interface d'administration.
+Le formulaire enverra automatiquement un e-mail à l'adresse configurée via l'onglet "E‑mail".
 
 ## Variables d'environnement Cloudron
 
-L'application exploite les variables `CLOUDRON_MYSQL_*` fournies par Cloudron pour se connecter à la base de données MySQL. Aucun paramètre supplémentaire n'est nécessaire :
+Le projet exploite les variables `CLOUDRON_MYSQL_*` et `CLOUDRON_MAIL_*` fournies par Cloudron. Elles permettent la connexion à MySQL côté PHP et la configuration SMTP pour le backend Node.js :
 
 ```
 CLOUDRON_MYSQL_HOST
