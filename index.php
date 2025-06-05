@@ -4,6 +4,9 @@ $formSubmitted = false;
 $errorMessage = '';
 $successMessage = '';
 
+// Include database configuration using Cloudron LAMP variables
+require_once __DIR__ . '/config.php';
+
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
@@ -57,17 +60,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </html>
         ";
         
-        // Set content-type header for sending HTML email
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: webform@ixapack.com" . "\r\n";
-        
-        // Send email
-        if (mail($to, $subject, $message, $headers)) {
-            $successMessage = "Formulaire envoyé avec succès à $to.";
-            $formSubmitted = true;
-        } else {
-            $errorMessage = "Une erreur est survenue lors de l'envoi du formulaire.";
+        // Insert form data into the database
+        try {
+            $stmt = $pdo->prepare("INSERT INTO fnc_forms (type_action, of, origine, numero_dossier, reference_pieces, quantite_lancees, quantite_rebutees, quantite_retouchees, numero_fnc, erreur_service, cause, retouche, phase, temps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([
+                $typeAction,
+                $of,
+                $origine,
+                $numeroDossier,
+                $referencePieces,
+                $quantiteLancees ?: null,
+                $quantiteRebutees ?: null,
+                $quantiteRetouchees ?: null,
+                $numeroFNC,
+                $erreurService,
+                $cause,
+                $retouche,
+                $phase,
+                $temps ?: null
+            ]);
+
+            // Set content-type header for sending HTML email
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: webform@ixapack.com" . "\r\n";
+
+            if (mail($to, $subject, $message, $headers)) {
+                $successMessage = "Formulaire envoyé avec succès à $to.";
+                $formSubmitted = true;
+            } else {
+                $errorMessage = "Une erreur est survenue lors de l'envoi du formulaire.";
+            }
+        } catch (PDOException $e) {
+            $errorMessage = 'Erreur base de données : ' . $e->getMessage();
         }
     }
 }
