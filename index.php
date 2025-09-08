@@ -4,8 +4,12 @@ $formSubmitted = false;
 $errorMessage = '';
 $successMessage = '';
 
-// Include database configuration using Cloudron LAMP variables
+// Include database configuration
 require_once __DIR__ . '/config.php';
+
+// Configure SMTP server
+ini_set('SMTP', 'ixapack.mail.protection.outlook.com');
+ini_set('smtp_port', '25');
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -33,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $subject = "$typeAction : $numeroFNC Numéro de FNC : $numeroFNC Numéro du dossier : $numeroDossier";
         
         // Set email recipient
-        $to = "fnc@ixapack.com";
+        $to = "christelle.bertrand@ixapack.com, informatique@ixapack.com";
         
         // Create email body in HTML format
         $message = "
@@ -83,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Set content-type header for sending HTML email
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= "From: webform@ixapack.com" . "\r\n";
+              $headers .= "From: christelle.bertrand@ixapack.com" . "\r\n";
 
             if (mail($to, $subject, $message, $headers)) {
                 $successMessage = "Formulaire envoyé avec succès à $to.";
