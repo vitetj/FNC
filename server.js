@@ -1,49 +1,16 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
-import fs from 'fs';
-import path from 'path';
 
 const app = express();
 app.use(express.json());
 
-const configPath = path.join(process.cwd(), 'emailConfig.json');
-
-function readConfig() {
-  try {
-    const data = fs.readFileSync(configPath, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    return { recipient: 'fnc@ixapack.com' };
-  }
-}
-
-function writeConfig(cfg) {
-  fs.writeFileSync(configPath, JSON.stringify(cfg, null, 2));
-}
-
-app.get('/api/email', (req, res) => {
-  res.json(readConfig());
-});
-
-app.post('/api/email', (req, res) => {
-  const { recipient } = req.body;
-  if (!recipient) return res.status(400).json({ error: 'recipient required' });
-  writeConfig({ recipient });
-  res.json({ message: 'updated' });
-});
-
 app.post('/api/send', async (req, res) => {
   const data = req.body;
-  const { recipient } = readConfig();
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.CLOUDRON_MAIL_SMTP_SERVER,
-      port: process.env.CLOUDRON_MAIL_SMTPS_PORT || process.env.CLOUDRON_MAIL_SMTP_PORT || 25,
-      secure: !!process.env.CLOUDRON_MAIL_SMTPS_PORT,
-      auth: {
-        user: process.env.CLOUDRON_MAIL_SMTP_USERNAME,
-        pass: process.env.CLOUDRON_MAIL_SMTP_PASSWORD
-      }
+      host: 'ixapack.mail.protection.outlook.com',
+      port: 25,
+      secure: false
     });
 
     const messageHtml = `
@@ -64,8 +31,11 @@ app.post('/api/send', async (req, res) => {
     `;
 
     await transporter.sendMail({
-      from: process.env.CLOUDRON_MAIL_FROM || 'webform@example.com',
-      to: recipient,
+      from: 'christelle.bertrand@ixapack.com',
+      to: [
+        'christelle.bertrand@ixapack.com',
+        'informatique@ixapack.com'
+      ],
       subject: `${data.typeAction} : ${data.numeroFNC} Numéro de FNC : ${data.numeroFNC} Numéro du dossier : ${data.numeroDossier}`,
       html: messageHtml
     });

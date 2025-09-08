@@ -8,8 +8,8 @@ Ce projet remplace la macro Outlook pour l'envoi des formulaires de non-conformi
 - Interface React moderne (Vite + Boosted/Tailwind) et design responsive
 - Collecte complète des données correspondant à tous les champs de la macro d'origine
 - Validation côté client pour assurer la saisie correcte des données
-- Envoi d'e‑mail via PHP ou via Node.js (nodemailer) avec prise en charge du SMTP Cloudron
-- Paramétrage de l'adresse de réception via l'onglet "E‑mail"
+- Envoi d'e‑mail via PHP ou via Node.js (nodemailer) via le serveur Outlook d'IXAPACK
+- Envoi automatique vers christelle.bertrand@ixapack.com et informatique@ixapack.com
 - Pages "Statistiques" et "Rapports" avec export CSV
 - Notifications de succès/erreur pour l'état de soumission du formulaire
 - Sélection par bouton radio pour les options "Retouche" ou "Rebut"
@@ -23,8 +23,7 @@ Ce projet remplace la macro Outlook pour l'envoi des formulaires de non-conformi
 
 4. Pour une version de développement, lancez `npm run dev` puis `npm start`
 5. Pour générer les fichiers de production, exécutez `npm run build`
-6. Configurez les variables d'environnement Cloudron (`CLOUDRON_MYSQL_*` et `CLOUDRON_MAIL_*`)
-7. Accédez à l'application via `http://localhost:5173` en développement
+6. Accédez à l'application via `http://localhost:5173` en développement
 
 ## Configuration requise
 
@@ -68,24 +67,4 @@ RewriteRule ^ index.php [L]
 Votre formulaire sera alors accessible directement sur votre domaine.
 
 
-Le formulaire enverra automatiquement un e-mail à l'adresse configurée via l'onglet "E‑mail".
-
-## Variables d'environnement Cloudron
-
-Le projet exploite les variables `CLOUDRON_MYSQL_*` et `CLOUDRON_MAIL_*` fournies par Cloudron. Elles permettent la connexion à MySQL côté PHP et la configuration SMTP pour le backend Node.js :
-
-```
-CLOUDRON_MYSQL_HOST
-CLOUDRON_MYSQL_PORT
-CLOUDRON_MYSQL_USERNAME
-CLOUDRON_MYSQL_PASSWORD
-CLOUDRON_MYSQL_DATABASE
-CLOUDRON_MAIL_SMTP_SERVER
-CLOUDRON_MAIL_SMTP_PORT
-CLOUDRON_MAIL_SMTPS_PORT
-CLOUDRON_MAIL_SMTP_USERNAME
-CLOUDRON_MAIL_SMTP_PASSWORD
-CLOUDRON_MAIL_FROM
-```
-
-Assurez-vous simplement que ces variables sont définies dans l'environnement (elles le sont automatiquement sur Cloudron).
+Le formulaire enverra automatiquement un e-mail aux adresses par défaut définies dans le code.
